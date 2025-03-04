@@ -45,6 +45,14 @@ async function main() {
   await ModularComplianceInstance.init();
   console.log('ModularCompliance initialized');
 
+  // OnChainIdentity
+  const [deployer] = await ethers.getSigners();
+
+  const OnChainIdentity = await ethers.getContractFactory('OnChainIdentity');
+  const OnChainIdentityInstance = await OnChainIdentity.deploy(deployer.address, false);
+  await OnChainIdentityInstance.deployed();
+  console.log(`OnChainIdentity deployed to: ${OnChainIdentityInstance.address}`);
+
   // Token
   const Token = await ethers.getContractFactory('Token');
   const TokenInstance = await Token.deploy();
@@ -56,7 +64,7 @@ async function main() {
     'Greenhood',
     'GHD',
     18,
-    '0xD16BfB22B94336B69E94B44C5758abE141a425a8',
+    OnChainIdentityInstance.address,
   );
   console.log('Token initialized');
 }
